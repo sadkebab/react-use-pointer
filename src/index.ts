@@ -1,1 +1,1 @@
-export * from './lib/useMouseAndTouchEvents'
+export * from "./lib/useMouseAndTouchEvents"

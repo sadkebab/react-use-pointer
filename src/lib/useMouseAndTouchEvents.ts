@@ -1,8 +1,8 @@
 
 type ButtonFunctionMap = {
-    onClick: ()=>any 
-    onDoubleClick: ()=>any 
-    onHold: ()=>any
+    onClick: () => void 
+    onDoubleClick: () => void 
+    onHold: () => void
 }
 
 const CLICK_MILLIS_WINDOW = 100
@@ -12,24 +12,23 @@ const HOLD_MIN = 300
 
 
 export type ClickAndHoldConfig = {
-    onClick?: ()=>any, 
-    onDoubleClick?: ()=> any, 
-    onHold?: ()=>any,
-    onRightClick?: ()=>any, 
-    onRightDoubleClick?: ()=>any, 
-    onRightHold?: ()=>any,
-    onMiddleClick?: ()=>any,
-    onMiddleHold?: ()=>any,
+    onClick?: () => void,
+    onDoubleClick?: () => void,
+    onHold?: () => void,
+    onRightClick?: () => void,
+    onRightDoubleClick?: () => void,
+    onRightHold?: () => void,
+    onMiddleClick?: () => void,
+    onMiddleHold?: () => void,
     holdMillis: number,
 }
 
 export default function useMouseAndTouchEvents(config: ClickAndHoldConfig){
-    config.holdMillis=config.holdMillis>=HOLD_MIN && config.holdMillis || HOLD_MIN
-    const {holdMillis} = config;
+    config.holdMillis = config.holdMillis >= HOLD_MIN && config.holdMillis || HOLD_MIN
+    const {holdMillis} = config
 
     const doNothing = () => 0
-
-    const handlers:ButtonFunctionMap[] = [
+    const handlers: ButtonFunctionMap[] = [
         {
             onClick: config.onClick ||  doNothing,
             onDoubleClick: config.onDoubleClick ||  doNothing,
@@ -53,49 +52,51 @@ export default function useMouseAndTouchEvents(config: ClickAndHoldConfig){
     let clickResetTimeout = 0
     let execTimeout = 0
 
-    const onMouseDown = (event: React.MouseEvent<HTMLElement>) =>{
-        clickHoldTimeout = setTimeout(handlers[event.button].onHold, holdMillis)
+    const onMouseDown = (event: React.MouseEvent<HTMLElement>) => {
         clearTimeout(execTimeout)
-        clearInterval(clickResetTimeout)
-        clickResetTimeout = setTimeout(()=>{clickCount=0}, CLICK_RESET_wINDOW)
-        lastStart = Date.now();
-        
+        clearInterval(clickResetTimeout);
+
+        clickHoldTimeout = setTimeout(handlers[event.button].onHold, holdMillis)
+        clickResetTimeout = setTimeout(() => { 
+            clickCount=0 
+        }, CLICK_RESET_wINDOW)
+        lastStart = Date.now()
     }
 
-    const onMouseUp = (event: React.MouseEvent<HTMLElement>) =>{
+    const onMouseUp = (event: React.MouseEvent<HTMLElement>) => {
         clearTimeout(clickHoldTimeout)
-        let diff = Date.now()-lastStart
+        const diff = Date.now()-lastStart
 
         if(diff>CLICK_EXPIRE_WINDOW) return
         
         clearTimeout(clickResetTimeout)
 
         if(clickCount == 0){
-            execTimeout = setTimeout(()=>{
+            execTimeout = setTimeout(() => {
                 handlers[event.button].onClick()
                 if(event.button == 1) event.preventDefault()
-                clickCount=0
+                clickCount = 0
             }, CLICK_MILLIS_WINDOW)
         }else if (clickCount == 1){
-            execTimeout = setTimeout(()=>{
+            execTimeout = setTimeout(() => {
                 handlers[event.button].onDoubleClick() 
-                clickCount=0
+                clickCount = 0
             }, CLICK_MILLIS_WINDOW)
         }
 
         clickCount++
-        return false;
+        return false
     }
     
-    let tapHoldTimeout = 0;
+    let tapHoldTimeout = 0
 
-    const onTouchStart = (event: React.TouchEvent<HTMLElement>) =>{
+    const onTouchStart = () => {
         clearTimeout(execTimeout)
         clearTimeout(tapHoldTimeout)
         tapHoldTimeout = setTimeout(handlers[0].onHold, holdMillis)
     }
 
-    const onTouchStop = (event: React.TouchEvent<HTMLElement>) =>{
+    const onTouchStop = () => {
         clearTimeout(tapHoldTimeout)
     }
     
