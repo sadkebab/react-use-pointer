@@ -1,4 +1,16 @@
 
+type ButtonFunctionMap = {
+    onClick: ()=>any 
+    onDoubleClick: ()=>any 
+    onHold: ()=>any
+}
+
+const CLICK_MILLIS_WINDOW = 100
+const CLICK_RESET_wINDOW = 250
+const CLICK_EXPIRE_WINDOW = 250
+const HOLD_MIN = 300
+
+
 export type ClickAndHoldConfig = {
     onClick?: ()=>any, 
     onDoubleClick?: ()=> any, 
