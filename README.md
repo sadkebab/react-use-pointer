@@ -4,42 +4,42 @@ A simple react hook that returns handlers for onMouseDown, onMouseUp, onTouchSta
 
 ## How to use
 ```
-export function MonkeyButton(){
+export function MonkeyButton() {
     const hold = 2000
 
-    const onClick = ()=>{
+    const onClick = () => {
         console.log('click')
     }
 
-    const onDoubleClick = ()=>{
+    const onDoubleClick = () => {
         console.log('doubleClick')
     }
 
-    const onHold = ()=>{
+    const onHold = () => {
         console.log(`pressed for ${hold} millis`)
     }
     
     let config: ClickAndHoldConfig = {
-        onClick:onClick, 
-        onDoubleClick:onDoubleClick, 
-        onHold:onHold,
-        holdMillis:hold
+        onClick: onClick, 
+        onDoubleClick: onDoubleClick, 
+        onHold: onHold,
+        holdMillis: hold
     }
 
     const clickAndHold = useMouseAndTouchEvents(config);
     
     return (
         <button 
-            title="Click me" 
-            className={`shadow-sm select-none shadow-slate-600/50 
+            title = "Click me" 
+            className = { `shadow-sm select-none shadow-slate-600/50 
                         w-10 bg-purple-300 rounded p-2 text-slate-600
-                        font-bold active:scale-95 active:shadow-inner`} 
-            type="button"
-            onMouseDown = {clickAndHold.onMouseDown}
-            onMouseUp = {clickAndHold.onMouseUp}
-            onTouchStart = {clickAndHold.onTouchStart}
-            onTouchEnd = {clickAndHold.onTouchStop}
-            onContextMenu = {(e)=>e.preventDefault()}
+                        font-bold active:scale-95 active:shadow-inner` } 
+            type = "button"
+            onMouseDown = { clickAndHold.onMouseDown }
+            onMouseUp = { clickAndHold.onMouseUp }
+            onTouchStart = { clickAndHold.onTouchStart }
+            onTouchEnd = { clickAndHold.onTouchStop }
+            onContextMenu = { (e)=>e.preventDefault() }
             >
                 🙊
         </button>
