@@ -29,7 +29,6 @@ export function MonkeyButton(){
     const clickAndHold = useMouseAndTouchEvents(config);
     
     return (
-        <div >
         <button 
             title="Click me" 
             className={`shadow-sm select-none shadow-slate-600/50 
@@ -44,7 +43,6 @@ export function MonkeyButton(){
             >
                 🙊
         </button>
-        </div>
     )
 }
 ```
